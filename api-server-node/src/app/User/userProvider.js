@@ -5,46 +5,38 @@ const userDao = require("./userDao");
 
 // Provider: Read 비즈니스 로직 처리
 
-exports.retrieveUserList = async function (userMail) {
-    if (!userMail) {
-        const connection = await pool.getConnection(async (conn) => conn);
-        const userListResult = await userDao.selectUser(connection);
-        connection.release();
+exports.retrieveUserList = async function (email) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const userListResult = await userDao.selectUser(connection);
+    connection.release();
 
-        return userListResult;
-
-    } else {
-        const connection = await pool.getConnection(async (conn) => conn);
-        const userListResult = await userDao.selectUserEmail(connection, userMail);
-        connection.release();
-
-        return userListResult;
-    }
+    return userListResult;
 };
 
 exports.retrieveUser = async function (userIdx) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const userResult = await userDao.selectUserId(connection, userIdx);
+    const userResult = await userDao.selectUserIdx(connection, userIdx);
 
     connection.release();
 
     return userResult[0];
 };
 
-exports.emailCheck = async function (userMail) {
+exports.phoneCheck = async function (userPhonenum) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const emailCheckResult = await userDao.selectUserEmail(connection, userMail);
+    const phoneCheckResult = await userDao.selectUserPhonenum(connection, userPhonenum);
     connection.release();
 
-    return emailCheckResult;
+    return phoneCheckResult;
 };
-exports.idxCheck = async function (userIdx) {
+
+exports.nicknameCheck = async function (userNickname){
     const connection = await pool.getConnection(async (conn) => conn);
-    const idxCheckResult = await userDao.selectUserId(connection, userIdx);
+    const nicknameCheckResult = await userDao.selectUserNickname(connection, userNickname);
     connection.release();
 
-    return idxCheckResult;
-};
+    return nicknameCheckResult;
+}
 
 exports.passwordCheck = async function (selectUserPasswordParams) {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -56,69 +48,18 @@ exports.passwordCheck = async function (selectUserPasswordParams) {
     return passwordCheckResult[0];
 };
 
-exports.accountCheck = async function (userMail) {
+exports.accountCheck = async function (userPhonenum) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const userAccountResult = await userDao.selectUserAccount(connection, userMail);
+    const userAccountResult = await userDao.selectUserAccount(connection, userPhonenum);
     connection.release();
 
     return userAccountResult;
 };
 
-exports.statusCheck = async function (userIdx) {
+exports.idxCheck = async function (userIdx) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const userCheckResult = await userDao.selectUserStatus(connection, userIdx);
+    const idxCheckResult = await userDao.selectUserId(connection, userIdx);
     connection.release();
 
-    return userCheckResult;
+    return idxCheckResult;
 };
-
-
-exports.retrieveUserDetails = async function(userIdx){
-    const connection = await pool.getConnection(async (conn) => conn);
-    const userResultDetails = await userDao.selectUserDetails(connection,userIdx);
-    connection.release();
-    return userResultDetails[0];
-};
-
-exports.retrieveUserKeep = async function(userIdx){
-    const connection = await pool.getConnection(async (conn) => conn);
-    const userResultKeep = await userDao.selectUserKeep(connection,userIdx);
-    connection.release();
-    return userResultKeep;
-};
-
-exports.postKeep = async function(hotelIdx){
-    const connection = await pool.getConnection(async (conn) => conn);
-    const userPostKeep = await userDao.postUserKeep(connection,hotelIdx);
-    connection.release();
-    return userPostKeep;
-};
-
-exports.KeepAccessCheck = async function (keepIdx)
-{   const connection = await pool.getConnection(async (conn) => conn);
-    const keepCheck = await userDao.selectKeepCheck(connection,keepIdx);
-    connection.release();
-    return keepCheck;
-
-}
-exports.retrieveUserPoint = async function(userIdx){
-    const connection = await pool.getConnection(async (conn) => conn);
-    const userResultPoint = await userDao.selectUserPoint(connection,userIdx);
-    connection.release();
-    return userResultPoint;
-}
-
-exports.retrieveUserCoupon = async function(userIdx){
-    const connection = await pool.getConnection(async (conn) => conn);
-    const userResultCoupon = await userDao.selectUserCoupon(connection,userIdx);
-    connection.release();
-    return userResultCoupon;
-}
-
-exports.retrieveUserReview = async function(userIdx){
-    const connection = await pool.getConnection(async (conn) => conn);
-    const userResultReview = await userDao.selectUserReview(connection,userIdx);
-    connection.release();
-    return userResultReview;
-}
-
